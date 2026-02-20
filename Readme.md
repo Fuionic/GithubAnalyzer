@@ -1,7 +1,3 @@
-This README is designed to represent your project as a professional engineering portfolio piece. It reflects the shift from a "simple API caller" to an "Intelligence Analyzer."
-
----
-
 # 🛡️ GitHub Profile Intelligence Analyzer
 
 **A High-Performance Spring Boot Analytics Engine**
