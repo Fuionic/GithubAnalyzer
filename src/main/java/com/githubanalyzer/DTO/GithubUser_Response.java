@@ -8,17 +8,24 @@ public class GithubUser_Response {
 
     private String login;
     private String name;
-    private int id;
+    private long id;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private String avatar_url;
-    private String email;
+
     private String bio;
 
     @JsonProperty("public_repos")  // Map the JSON property "public_repos" to the Java field "public_repos"
     private String public_repos;
+
     private Long followers;
     private Long following;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private String created_at;
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private String updated_at;
+
 
     public String getLogin() {
         return login;
@@ -43,11 +50,11 @@ public class GithubUser_Response {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -59,13 +66,7 @@ public class GithubUser_Response {
         this.avatar_url = avatar_url;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPublic_repos() {
         return public_repos;
@@ -106,4 +107,6 @@ public class GithubUser_Response {
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
+
+
 }
