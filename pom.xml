@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.githubanalyzer</groupId>
-	<artifactId>Githhub_Analyzer</artifactId>
+	<artifactId>Github_Analyzer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Githhub_Analyzer</name>
 	<description>Project for Spring Boot</description>
@@ -53,6 +53,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Source: https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.42</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
