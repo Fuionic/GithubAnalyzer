@@ -19,10 +19,12 @@ public class AnalyzerService {
 
     private GitHubService gitHubService;
     private ReportRepository reportRepository;
+    private AiService aiService;
 
-    public AnalyzerService(GitHubService gitHubService , ReportRepository reportRepository){
+    public AnalyzerService(GitHubService gitHubService , ReportRepository reportRepository, AiService aiService) {
         this.gitHubService  = gitHubService;
         this.reportRepository = reportRepository;
+        this.aiService = aiService;
     }
 
     public AnalysisResponse analyzeProfile(AnalysisRequest request) {
@@ -53,17 +55,21 @@ public class AnalyzerService {
             languagesString = "None Specified";
         }
 
-        String temporaryAiSummary = "### Technical Profile: " + username + "\n" +
-                "Live telemetry captured from external GitHub clusters.\n\n" +
-                "* **Tech Stack Stack:** High density across [" + languagesString + "] ecosystems.\n" +
-                "* **Community Footprint:** Aggregated " + totalStars + " total repository stars.";
+        List<String> languageList = uniqueLanguages.stream().collect(Collectors.toList());
+
+        String liveAiSummary = aiService.generateProfileSummary(
+                username,
+                totalRepos,
+                totalStars,
+                languageList
+        );
 
         AnalysisReport newReport = new AnalysisReport();
         newReport.setGithubUsername(username);
         newReport.setTotalRepos(totalRepos);
         newReport.setTotalStars(totalStars);
         newReport.setPrimaryLanguages(languagesString);
-        newReport.setAiSummary(temporaryAiSummary);
+        newReport.setAiSummary(liveAiSummary);
         newReport.setUpdatedAt(LocalDateTime.now());
 
         AnalysisReport savedReport = reportRepository.save(newReport);
