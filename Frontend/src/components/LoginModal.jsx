@@ -26,7 +26,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         throw new Error('Invalid credentials');
       }
 
-      await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({}));
+      if (data.token) {
+        localStorage.setItem('auth_token', data.token);
+      }
       if (onLoginSuccess) {
         onLoginSuccess();
       }

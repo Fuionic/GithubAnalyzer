@@ -93,7 +93,7 @@ const AuthPage = ({ onBackToHome, onLogin, onOpenLegal, initialShowLogin = false
             <button 
               type="button" 
               onClick={() => {
-                window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+                window.location.href = '/oauth2/authorization/github';
               }}
               className="w-full flex items-center justify-center gap-3 rounded-md border border-[rgba(255,255,255,0.12)] bg-white/5 text-white hover:bg-zinc-900 transition-all duration-200 py-2.5 font-medium"
             >
@@ -103,7 +103,7 @@ const AuthPage = ({ onBackToHome, onLogin, onOpenLegal, initialShowLogin = false
             <button 
               type="button" 
               onClick={() => {
-                window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+                window.location.href = '/oauth2/authorization/google';
               }}
               className="w-full flex items-center justify-center gap-3 rounded-md border border-[rgba(255,255,255,0.12)] bg-white/5 text-white hover:bg-zinc-900 transition-all duration-200 py-2.5 font-medium"
             >
