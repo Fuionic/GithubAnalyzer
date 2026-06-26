@@ -12,12 +12,12 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const AuthPage = ({ onBackToHome, onLogin, onOpenLegal }) => {
+const AuthPage = ({ onBackToHome, onLogin, onOpenLegal, initialShowLogin = false }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(initialShowLogin);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

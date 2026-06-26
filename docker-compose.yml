@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # 1. Database Layer (MySQL 8)
+  mysql-db:
+    image: mysql:8.0
+    container_name: analyzer-mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - analyzer-network
+
+  # 2. Caching Layer (Redis)
+  redis-cache:
+    image: redis:7-alpine
+    container_name: analyzer-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - analyzer-network
+
+  # 3. Backend Core Engine (Spring Boot + Java 25)
+  backend:
+    build: ./Backend
+    container_name: analyzer-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+      - redis-cache
+    environment:
+      # Database Connection Mapping (Uses container name 'mysql-db')
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
+      
+      # Redis Connection Mapping (Uses container name 'redis-cache')
+      - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+      
+      # Security & API Secrets
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - SPRING_AI_GOOGLE_GENAI_API_KEY=${GEMINI_API_KEY}
+      - FRONTEND_URL=${FRONTEND_URL}
+      
+      # Social Authentication Client Configurations
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+    networks:
+      - analyzer-network
+
+  # 4. Frontend User Interface Layer (React + Nginx)
+  frontend:
+    build: ./Frontend
+    container_name: analyzer-frontend
+    ports:
+      - "3000:80" # Maps localhost:3000 to internal Nginx container port 80
+    depends_on:
+      - backend
+    networks:
+      - analyzer-network
+
+volumes:
+  mysql_data: # Keeps your database records safe even if containers stop or restart
+
+networks:
+  analyzer-network:
+    driver: bridge

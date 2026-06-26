@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Users, Star, Code2, Target, CheckCircle2 } from 'lucide-react';
 
 const FeaturesGrid = () => {
+  const [scannedCount, setScannedCount] = useState(10);
+  const [activeUsers, setActiveUsers] = useState(4);
+
+  useEffect(() => {
+    // Simulate new profiles being scanned
+    const scannedInterval = setInterval(() => {
+      setScannedCount(prev => prev + Math.floor(Math.random() * 2) + 1);
+    }, 3500);
+
+    // Simulate active user fluctuation
+    const usersInterval = setInterval(() => {
+      setActiveUsers(prev => {
+        const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or +1
+        const next = prev + change;
+        return next > 2 ? next : 3; // Keep it above 2
+      });
+    }, 4500);
+
+    return () => {
+      clearInterval(scannedInterval);
+      clearInterval(usersInterval);
+    };
+  }, []);
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -21,11 +45,11 @@ const FeaturesGrid = () => {
   return (
     <div className="w-full max-w-6xl mx-auto mb-32 scroll-mt-20" id="features">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-4">Production MVP Feature Matrix</h2>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-4">Feature Matrix</h2>
         <p className="text-zinc-400 max-w-2xl mx-auto text-sm">Empowering enterprise technical sourcing with deep, verifiable developer profile intelligence.</p>
       </div>
 
-      <motion.div 
+      <motion.div
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -41,12 +65,15 @@ const FeaturesGrid = () => {
             <h3 className="text-xl font-bold text-white tracking-tight mb-2">AI Developer Summary</h3>
             <p className="text-zinc-400 text-xs mb-6">Generates qualitative summaries reflecting genuine engineering character, team habits, and code patterns.</p>
           </div>
-          
+
           {/* Output block representing real developer strings */}
-          <div className="bg-black/40 border border-white/5 rounded-xl p-5 font-mono text-[11px] leading-relaxed text-zinc-300">
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-3 text-zinc-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span>SYNTHESIZED PROFILE SUMMARY</span>
+          <div className="bg-black/40 border border-white/5 rounded-lg p-6 font-mono text-xs text-zinc-300 leading-relaxed relative z-10">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2 mb-4">
+              <span className="text-[10px] text-zinc-500 tracking-wider font-semibold uppercase">Synthesized Profile Summary</span>
+              <span className="text-[10px] text-emerald-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                ACTIVE
+              </span>
             </div>
             <p className="mb-2">
               <span className="text-zinc-500">&gt;</span> Exhibits strong adherence to clean architectural separation of concerns (SOLID principles).
@@ -60,20 +87,45 @@ const FeaturesGrid = () => {
           </div>
         </motion.div>
 
-        {/* Card 2: Sourcing Volume (col-span-1) */}
+        {/* Card 2: Live Compute Footprint (col-span-1) */}
         <motion.div variants={item} className="col-span-1 bg-white/[0.02] backdrop-blur-md border border-white/8 rounded-2xl p-8 hover:bg-white/[0.04] transition-colors shadow-sm flex flex-col justify-between">
           <div>
             <div className="w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center border border-white/8 mb-6 text-zinc-300">
               <Users size={18} />
             </div>
-            <h3 className="text-xl font-bold text-white tracking-tight mb-2">Sourcing Volume</h3>
-            <p className="text-zinc-400 text-xs mb-6">Unrivaled access to scanned and indexable profiles globally.</p>
-          </div>
-          <div className="pt-4 border-t border-white/5">
-            <div className="text-3xl font-extrabold text-white tracking-tight font-mono mb-1">
-              1,240,500+
+            <h3 className="text-xl font-bold text-white tracking-tight mb-2">Live Compute Footprint</h3>
+            <p className="text-zinc-400 text-xs mb-4">
+              Bypass static data warehouses. The Antigravity engine performs real-time AST structure analysis, parsing public repository sizes, language densities, and commit logs instantly on demand.
+            </p>
+
+            {/* Secondary feature accent row */}
+            <div className="pt-3 border-t border-white/5 mt-4">
+              <div className="text-xs font-semibold text-emerald-400 mb-1 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Ephemeral Data Memory
+              </div>
+              <p className="text-zinc-500 text-[11px] leading-relaxed">
+                Security by design. Calculated metrics process through secure sandboxed memory lanes that never persist user code footprints on our core database arrays.
+              </p>
             </div>
-            <div className="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Profiles Scanned & Indexed</div>
+          </div>
+
+          {/* Live counters from the previous requirement */}
+          <div className="pt-4 border-t border-white/5 space-y-3 mt-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Profiles Scanned</span>
+              <span className="text-lg font-bold text-white font-mono">{scannedCount.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">Active Users Now</span>
+              <span className="text-lg font-bold text-emerald-400 font-mono flex items-center gap-1.5">
+                {activeUsers}
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                </span>
+              </span>
+            </div>
           </div>
         </motion.div>
 

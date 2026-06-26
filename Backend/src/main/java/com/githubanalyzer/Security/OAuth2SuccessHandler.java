@@ -5,6 +5,7 @@ import com.githubanalyzer.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -17,6 +18,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
+
+    @Value("${app.frontend-url:http://localhost:3000}")
+    private String frontendUrl;
 
     public OAuth2SuccessHandler(JwtUtils jwtUtils, UserRepository userRepository) {
         this.jwtUtils = jwtUtils;
@@ -52,7 +56,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String token = jwtUtils.generateToken(email);
 
-        String targetUrl = "http://localhost:5173/?token=" + token;
+        String targetUrl = frontendUrl + "/?token=" + token;
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

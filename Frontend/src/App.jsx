@@ -9,21 +9,32 @@ import DashboardShell from './components/DashboardShell';
 import LegalModal from './components/LegalModal';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'auth' | 'dashboard'
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('antigravity_session') === 'true');
+  const [currentView, setCurrentView] = useState(() => 
+    localStorage.getItem('antigravity_session') === 'true' ? 'dashboard' : 'home'
+  );
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalTab, setLegalModalTab] = useState('privacy');
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
     if (token) {
       localStorage.setItem('auth_token', token);
+      localStorage.setItem('antigravity_session', 'true');
+      setIsLoggedIn(true);
       window.history.replaceState({}, document.title, window.location.pathname);
       setCurrentView('dashboard');
     } else {
       const storedToken = localStorage.getItem('auth_token');
       if (storedToken) {
+        localStorage.setItem('antigravity_session', 'true');
+        setIsLoggedIn(true);
         setCurrentView('dashboard');
+      } else {
+        localStorage.removeItem('antigravity_session');
+        setIsLoggedIn(false);
       }
     }
   }, []);
@@ -34,11 +45,15 @@ export default function App() {
   };
 
   const handleLogin = () => {
+    localStorage.setItem('antigravity_session', 'true');
+    setIsLoggedIn(true);
     setCurrentView('dashboard');
   };
 
   const handleLogout = () => {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('antigravity_session');
+    setIsLoggedIn(false);
     setCurrentView('home');
   };
 
@@ -46,9 +61,13 @@ export default function App() {
     return (
       <div className="bg-[#000000] min-h-screen">
         <AuthPage 
-          onBackToHome={() => setCurrentView('home')} 
+          onBackToHome={() => {
+            setIsLoginPopupOpen(false);
+            setCurrentView('home');
+          }} 
           onLogin={handleLogin} 
           onOpenLegal={handleOpenLegal}
+          initialShowLogin={isLoginPopupOpen}
         />
         <LegalModal 
           isOpen={legalModalOpen} 
@@ -71,7 +90,16 @@ export default function App() {
       <div className="glow-bg" />
       
       {/* Header Navigation */}
-      <Header onGetStarted={() => setCurrentView('auth')} />
+      <Header 
+        onSignIn={() => {
+          setIsLoginPopupOpen(true);
+          setCurrentView('auth');
+        }}
+        onGetStarted={() => {
+          setIsLoginPopupOpen(false);
+          setCurrentView('auth');
+        }}
+      />
       
       {/* Main Content Layout */}
       <main className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center">

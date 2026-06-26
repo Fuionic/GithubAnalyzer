@@ -11,7 +11,7 @@ const Hero = ({ onGetStarted }) => {
         className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-zinc-900/50 text-zinc-300 text-sm font-medium mb-8 backdrop-blur-sm"
       >
         <span className="flex h-2 w-2 rounded-full bg-zinc-400"></span>
-        AI-Powered Tech Recruiting 2.0
+        AI-Powered Tech Recruiting
       </motion.div>
 
       <motion.h1
