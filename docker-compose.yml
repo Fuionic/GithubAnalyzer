@@ -36,14 +36,16 @@ services:
       - mysql-db
       - redis-cache
     environment:
-      # Database Connection Mapping (Uses container name 'mysql-db')
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false
-      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
-      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
+      # Database Connection Mapping
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       
-      # Redis Connection Mapping (Uses container name 'redis-cache')
+      # Redis Connection Mapping
       - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
       - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+      - SPRING_DATA_REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SPRING_DATA_REDIS_SSL_ENABLED=${REDIS_SSL}
       
       # Security & API Secrets
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
