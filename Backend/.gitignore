@@ -39,4 +39,3 @@ build/
 
 #credential configuration
 **/application.properties
-**/application.yml
