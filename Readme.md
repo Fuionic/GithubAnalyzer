@@ -6,11 +6,6 @@
 
 ---
 
-## Repository Notice
-The source code for this project is hosted in a private repository to protect API keys, custom authentication handling. It prevents exposure of application endpoints while keeping deployment pipelines secure.
-
----
-
 ## Live Demo
 You can access the live web application interface directly at [gitanalyzer-omega.vercel.app](https://gitanalyzer-omega.vercel.app). The user interface is optimized for modern web browsers, featuring responsive glassmorphic layouts and interactive dashboard panels.
 
