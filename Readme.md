@@ -13,7 +13,7 @@ You can access the live web application interface directly at [gitanalyzer-omega
 
 ## Demo Video
 For a complete visual walkthrough of the user flows, authentication steps, real-time developer dossier generation, and overall system functionality, watch the walkthrough video link:
-<video src="assets/GitAnlayzer.mp4" controls="controls" width="100%"></video>
+[Click here to view the Demonstration Video](https://github.com/Fuionic/GithubAnalyzer/raw/main/assets/GitAnlayzer.mp4)
 
 ---
 
